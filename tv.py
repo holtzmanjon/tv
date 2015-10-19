@@ -161,6 +161,8 @@ class TV:
                     # pan
                     xrange = xlim[1]-xlim[0]
                     yrange = ylim[1]-ylim[0]
+                if xrange < yrange and xrange < 512 : xrange = 512
+                if yrange < xrange and yrange < 512 : yrange = 512
                 self.ax.set_xlim(event.xdata-xrange/2.,event.xdata+xrange/2.)
                 self.ax.set_ylim(event.ydata-yrange/2.,event.ydata+yrange/2.)
                 plt.draw()
@@ -273,9 +275,9 @@ class TV:
             self.hdr=None
       
         # get autodisplay parameters if needed, and save display params
-        if min == None : 
+        if min is None : 
            min = 0.
-        if max == None : 
+        if max is None : 
            sky = mmm.mmm(data)
            min = sky[0]-5*sky[1]
            max = sky[0]+20*sky[1]
