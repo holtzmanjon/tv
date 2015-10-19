@@ -4,7 +4,8 @@ import matplotlib.patches as patches
 import matplotlib
 from astropy.wcs import wcs
 import cmap
-from PythonPhot import mmm
+import mmm
+import pdb
  
 class TV:
  
@@ -28,19 +29,25 @@ class TV:
         tv.set_facecolor('darkred')
 
         # set up initial img and header lists
-        self.current = 0
-        self.img = img
-        self.imglist = [img, img, img, img]
+        self.current = -1
+        self.images = 0
+        #self.img = img
+        #self.imglist = [img, img, img, img]
+        self.img = None
+        self.imglist = [None, None, None, None]
         self.hdr = None
         self.hdrlist = [None, None, None, None]
         self.scale = [0.,1.]
         self.scalelist = [[0.,1.],[0.,1.],[0.,1.],[0.,1.]]
         self.cmap = 'Greys_r'
+        self.axlist = [None, None, None, None]
 
         # display image and colorbar, set colorbar default limits
         plt.axis('off')
-        self.aximage=plt.imshow(self.img,vmin=self.scale[0],vmax=self.scale[1],cmap=self.cmap,interpolation='none')
-        self.cb=tv.colorbar(self.aximage,orientation='horizontal',shrink=0.7,pad=0)
+        #self.aximage=plt.imshow(self.img,vmin=self.scale[0],vmax=self.scale[1],cmap=self.cmap,interpolation='none')
+        #self.cb=tv.colorbar(self.aximage,orientation='horizontal',shrink=0.7,pad=0)
+        self.cb = None
+        self.cblist = [None, None, None, None]
         #plt.subplots_adjust(bottom=0.0,top=1.0,left=0.0,right=1.0)
         plt.subplots_adjust(left=-0.15,right=1.15,bottom=-0.10,top=1.00)
         self.bottom = 0.
@@ -101,19 +108,25 @@ class TV:
             self.key = event.key
             if event.key == '-' or event.key == '+' or event.key == '=':
                 if event.key == '-' :
-                    self.current = (self.current-1) % 4
+                    self.current = (self.current-1) % self.images
                 elif event.key == '+' or event.key == '=':
-                    self.current = (self.current+1) % 4
+                    self.current = (self.current+1) % self.images
                 self.img = self.imglist[self.current]
                 self.hdr = self.hdrlist[self.current]
                 self.scale = self.scalelist[self.current]
-                #self.ax.imshow(self.img,cmap='Greys_r')
-                self.aximage = self.ax.imshow(self.img,
-                  vmin=self.scale[0],vmax=self.scale[1],cmap=self.cmap,interpolation='none')
-                self.cb.ax.clear()
-                self.cb = self.ax.get_figure().colorbar(self.aximage,cax=self.cb.ax,orientation='horizontal')
-                cm=cmap.remap(self.cmap,self.bottom,self.top)
-                self.aximage.set_cmap(cm)
+                for i in range(self.images) :
+                    if i == self.current :
+                        self.axlist[i].set_visible(True)
+                    else :
+                        self.axlist[i].set_visible(False)
+                self.aximage=self.axlist[self.current]
+                self.cb=self.cblist[self.current]
+                #self.aximage = self.ax.imshow(self.img,
+                #  vmin=self.scale[0],vmax=self.scale[1],cmap=self.cmap,interpolation='none')
+                #self.cb.ax.clear()
+                #self.cb = self.ax.get_figure().colorbar(self.aximage,cax=self.cb.ax,orientation='horizontal')
+                #cm=cmap.remap(self.cmap,self.bottom,self.top)
+                #self.aximage.set_cmap(cm)
                 plt.draw()
 
             elif event.key == 'r' and subPlotNr == 0 :
@@ -244,6 +257,8 @@ class TV:
 
         # load new image data onto rolling stack
         current= (self.current+1) % 4
+        self.images += 1
+        if self.images > 4 : self.images = 4
         self.current = current
         self.imglist.pop(current)
         self.imglist.insert(current,data)
@@ -275,9 +290,18 @@ class TV:
         dim=np.shape(self.img)
         self.ax.set_xlim(-0.5,dim[1]-0.5)
         self.ax.set_ylim(-0.5,dim[0]-0.5)
-        self.aximage = self.ax.imshow(data,vmin=min,vmax=max,cmap=self.cmap,interpolation='none')
-        self.cb.ax.clear()
-        self.cb = self.ax.get_figure().colorbar(self.aximage,cax=self.cb.ax,orientation='horizontal')
+        self.aximage = self.ax.imshow(data,vmin=min,vmax=max,cmap=self.cmap,interpolation='nearest')
+        self.axlist.pop(current)
+        self.axlist.insert(current,self.aximage)
+        if self.cb is None :
+            self.cb = self.fig.colorbar(self.aximage,orientation='horizontal',shrink=0.7,pad=0)
+            #plt.subplots_adjust(left=-0.15,right=1.15,bottom=-0.10,top=1.00)
+        else :
+            self.cb.ax.clear()
+            self.cb = self.fig.colorbar(self.aximage,cax=self.cb.ax,orientation='horizontal')
+        self.cblist.pop(current)
+        self.cblist.insert(current,self.cb)
+
         plt.draw()
         # instead of redraw color, could replace data, but not if sizes change?
         # img.set_data()
