@@ -69,11 +69,11 @@ class TV:
                        object=self.hdr['object']
                     except:
                        object=None
-                    return "[col,row]=[%4d, %4d] val=%8.1f   [%s %s]=[%10.6f,%10.6f]   OBJECT: %s" % (x,y, self.img[y, x], mywcs.wcs.ctype[0],mywcs.wcs.ctype[1],world[0,0], world[0,1], object)
+                    return "[x,y]=[%4d, %4d] val=%8.1f   [%s %s]=[%10.6f,%10.6f]   OBJECT: %s" % (x,y, self.img[y, x], mywcs.wcs.ctype[0],mywcs.wcs.ctype[1],world[0,0], world[0,1], object)
 		except:
                     mywcs=None
                 try:
-                    return "[col,row]\n [%4i, %4i] val=%8.1f OBJECT: %s" % (x,y, self.img[y, x], object)
+                    return "[x,y]\n [%4i, %4i] val=%8.1f OBJECT: %s" % (x,y, self.img[y, x], object)
                 except IndexError:
                     return ""
             except:
