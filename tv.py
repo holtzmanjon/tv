@@ -293,7 +293,12 @@ class TV:
         self.ax.set_xlim(-0.5,dim[1]-0.5)
         self.ax.set_ylim(-0.5,dim[0]-0.5)
         self.aximage = self.ax.imshow(data,vmin=min,vmax=max,cmap=self.cmap,interpolation='nearest')
-        self.axlist.pop(current)
+        old=self.axlist.pop(current)
+        # if we had a previous image, reload the data with a single value
+        # so we don't continually accumulate memory (matplotlib doesn't
+        # describe how memory can be released
+        z=np.zeros([1,1])
+        if old is not None : old.set_data(z)
         self.axlist.insert(current,self.aximage)
         if self.cb is None :
             self.cb = self.fig.colorbar(self.aximage,orientation='horizontal',shrink=0.7,pad=0)
