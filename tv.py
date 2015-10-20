@@ -5,7 +5,7 @@ import matplotlib
 from astropy.wcs import wcs
 import cmap
 import mmm
-import pdb
+import autopy
  
 class TV:
  
@@ -27,12 +27,16 @@ class TV:
         self.fig = tv
         tv.canvas.set_window_title('Image display window')
         tv.set_facecolor('darkred')
+        #ax = plt.axes()
+        ax = tv.add_subplot(111)
+        self.ax = ax
+        ax.axis('off')
 
         # set up initial img and header lists
         self.current = -1
         self.images = 0
-        #self.img = img
-        #self.imglist = [img, img, img, img]
+ 
+        # initialize rolling buffers
         self.img = None
         self.imglist = [None, None, None, None]
         self.hdr = None
@@ -42,14 +46,10 @@ class TV:
         self.cmap = 'Greys_r'
         self.axlist = [None, None, None, None]
 
-        # display image and colorbar, set colorbar default limits
-        plt.axis('off')
-        #self.aximage=plt.imshow(self.img,vmin=self.scale[0],vmax=self.scale[1],cmap=self.cmap,interpolation='none')
-        #self.cb=tv.colorbar(self.aximage,orientation='horizontal',shrink=0.7,pad=0)
+        # set up colorbar
         self.cb = None
         self.cblist = [None, None, None, None]
-        #plt.subplots_adjust(bottom=0.0,top=1.0,left=0.0,right=1.0)
-        plt.subplots_adjust(left=-0.15,right=1.15,bottom=-0.10,top=1.00)
+        tv.subplots_adjust(left=-0.15,right=1.15,bottom=-0.10,top=1.00)
         self.bottom = 0.
         self.top = 1.
 
@@ -80,16 +80,14 @@ class TV:
                 return " [%4i, %4i]" % (x, y)
 
         # set this routine up for format
-        ax = plt.axes()
-        self.ax = ax
         ax.format_coord = format_coord
 
         #event handling 
         self.event = None
-        self.cid = self.fig.canvas.mpl_connect('key_press_event', self.onEvent)
-        self.cid2 = self.fig.canvas.mpl_connect('button_press_event', self.onEvent)
-        self.cid3 = self.fig.canvas.mpl_connect('button_release_event', self.onEvent)
-        self.cid4 = self.fig.canvas.mpl_connect('motion_notify_event', self.onEvent)
+        self.cid = tv.canvas.mpl_connect('key_press_event', self.onEvent)
+        self.cid2 = tv.canvas.mpl_connect('button_press_event', self.onEvent)
+        self.cid3 = tv.canvas.mpl_connect('button_release_event', self.onEvent)
+        self.cid4 = tv.canvas.mpl_connect('motion_notify_event', self.onEvent)
         self.button = False
         self.blocking = 0
 
@@ -106,6 +104,13 @@ class TV:
         if event.name == 'key_press_event' :
             # keypress events: '-', '+/=', 'r'
             self.key = event.key
+
+            # function for computing "scale"
+            def scale() :
+                p1 = self.ax.transData.transform((0,0))
+                p2 = self.ax.transData.transform((1,1))
+                return p2[1]-p1[1], p2[0]-p1[0]
+
             if event.key == '-' or event.key == '+' or event.key == '=':
                 if event.key == '-' :
                     self.current = (self.current-1) % self.images
@@ -128,6 +133,8 @@ class TV:
                 #cm=cmap.remap(self.cmap,self.bottom,self.top)
                 #self.aximage.set_cmap(cm)
                 plt.draw()
+                x,y= autopy.mouse.get_pos()
+                autopy.mouse.move(x,y)
 
             elif event.key == 'r' and subPlotNr == 0 :
                 dim=np.shape(self.img)
@@ -141,6 +148,26 @@ class TV:
                 cm=cmap.remap(self.cmap,self.bottom,self.top)
                 self.aximage.set_cmap(cm)
                 plt.draw()
+
+            elif event.key == 'left' and subPlotNr == 0 :
+                xs,ys = scale()
+                x,y= autopy.mouse.get_pos()
+                autopy.mouse.move(int(x-xs),y)
+
+            elif event.key == 'right' and subPlotNr == 0 :
+                xs,ys = scale()
+                x,y= autopy.mouse.get_pos()
+                autopy.mouse.move(int(x+xs),y)
+
+            elif event.key == 'up' and subPlotNr == 0 :
+                xs,ys = scale()
+                x,y= autopy.mouse.get_pos()
+                autopy.mouse.move(x,int(y-ys))
+
+            elif event.key == 'down' and subPlotNr == 0 :
+                xs,ys = scale()
+                x,y = autopy.mouse.get_pos()
+                autopy.mouse.move(x,int(y+ys))
 
             if self.blocking == 1 : self.stopBlock()
 
@@ -161,8 +188,8 @@ class TV:
                     # pan
                     xrange = xlim[1]-xlim[0]
                     yrange = ylim[1]-ylim[0]
-                if xrange < yrange and xrange < 512 : xrange = 512
-                if yrange < xrange and yrange < 512 : yrange = 512
+                #if xrange < yrange and xrange < 512 : xrange = 512
+                #if yrange < xrange and yrange < 512 : yrange = 512
                 self.ax.set_xlim(event.xdata-xrange/2.,event.xdata+xrange/2.)
                 self.ax.set_ylim(event.ydata-yrange/2.,event.ydata+yrange/2.)
                 plt.draw()
