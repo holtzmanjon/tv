@@ -1,0 +1,234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Usage &mdash; tv 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="tv 1.0 documentation" href="index.html" />
+    <link rel="next" title="TODO" href="todo.html" />
+    <link rel="prev" title="Introduction" href="intro.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="todo.html" title="TODO"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="Introduction"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">tv 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="main-user-routines">
+<h1>Main user routines<a class="headerlink" href="#main-user-routines" title="Permalink to this headline">¶</a></h1>
+<p>#.. autodoc::
+#
+#   tv.TV.tv
+#   tv.TV.tvbox
+#   tv.TV.tvmark
+#
+#Full class listing:
+<strong>**</strong></p>
+<span class="target" id="module-tv"></span><dl class="class">
+<dt id="tv.TV">
+<em class="property">class </em><code class="descclassname">tv.</code><code class="descname">TV</code><span class="sig-paren">(</span><em>img=array([[ 1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.],        [ 1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.],        [ 1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.],        [ 1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.],        [ 1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.],        [ 1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.],        [ 1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.],        [ 1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.],        [ 1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.],        [ 1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.]]), fig=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tv.html#TV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tv.TV" title="Permalink to this definition">¶</a></dt>
+<dd><p>A &#8220;TV&#8221; figure</p>
+<dl class="docutils">
+<dt>Usage: import tv</dt>
+<dd>tv=TV()  to set up a new TV object (display window)</dd>
+</dl>
+<dl class="method">
+<dt id="tv.TV.getSubPlotNr">
+<code class="descname">getSubPlotNr</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tv.html#TV.getSubPlotNr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tv.TV.getSubPlotNr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the nr of the subplot that has been clicked</p>
+<p>Arguments:
+event &#8211; an event</p>
+<p>Returns:
+A number or None if no subplot has been clicked</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tv.TV.onEvent">
+<code class="descname">onEvent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tv.html#TV.onEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tv.TV.onEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler for all trapped events.</p>
+<p>Arguments:
+event &#8211; a KeyEvent</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tv.TV.startBlock">
+<code class="descname">startBlock</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tv.html#TV.startBlock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tv.TV.startBlock" title="Permalink to this definition">¶</a></dt>
+<dd><p>starts blocking for keypress event</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tv.TV.stopBlock">
+<code class="descname">stopBlock</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tv.html#TV.stopBlock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tv.TV.stopBlock" title="Permalink to this definition">¶</a></dt>
+<dd><p>stops blocking for keypress event</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tv.TV.tv">
+<code class="descname">tv</code><span class="sig-paren">(</span><em>img</em>, <em>min=None</em>, <em>max=None</em>, <em>cmap=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tv.html#TV.tv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tv.TV.tv" title="Permalink to this definition">¶</a></dt>
+<dd><p>main display routine: displays image with optional scaling</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>img</strong> &#8211; a numpy array OR a fits HDU</li>
+<li><strong>max=</strong> (<em>min=,</em>) &#8211; option scaling arguments</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tv.TV.tvbox">
+<code class="descname">tvbox</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>size=None</em>, <em>color=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tv.html#TV.tvbox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tv.TV.tvbox" title="Permalink to this definition">¶</a></dt>
+<dd><p>displays a patch (box by default) on an image</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>x,y</strong> &#8211; center position of patch</li>
+<li><strong>size</strong> &#8211; (optional) patch size</li>
+<li><strong>color</strong> &#8211; (optional) patch color</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tv.TV.tvclear">
+<code class="descname">tvclear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tv.html#TV.tvclear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tv.TV.tvclear" title="Permalink to this definition">¶</a></dt>
+<dd><p>clears patches from image</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tv.TV.tvmark">
+<code class="descname">tvmark</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tv.html#TV.tvmark"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tv.TV.tvmark" title="Permalink to this definition">¶</a></dt>
+<dd><p>blocking input waits for key press in display and returns key and
+data pixel location of keypress
+:param none:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">key pressed, x data position, y data position</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Usage</a></li>
+<li><a class="reference internal" href="#main-user-routines">Main user routines</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="intro.html"
+                        title="previous chapter">Introduction</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="todo.html"
+                        title="next chapter">TODO</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/usage.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="todo.html" title="TODO"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="Introduction"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">tv 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Jon Holtzman.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

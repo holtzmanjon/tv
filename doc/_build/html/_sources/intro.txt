@@ -17,11 +17,3 @@ between them using the '-' and '+/=' keys.
 
 A method is provided to allow the user to retrieve the location of a keystroke
 event in the window along with the key that was pressed.
-
-Installation
-***********
-
-The package requires autopy to be installed (available via pip). For Mac OS X,
-this requires libpng
-
-The tv package is available at http://github.com/holtzmanjon/tv
