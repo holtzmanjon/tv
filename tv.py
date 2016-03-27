@@ -6,6 +6,7 @@ from astropy.wcs import wcs
 import cmap
 import mmm
 import autopy
+import pdb
  
 class TV:
  
@@ -95,8 +96,8 @@ class TV:
         """
         Handler for all trapped events. 
         
-        Arguments:
-        event -- a KeyEvent
+        Args:
+          event -- a KeyEvent
         """
         self.event = event
         subPlotNr = self.getSubPlotNr(event)        
@@ -138,8 +139,11 @@ class TV:
 
             elif event.key == 'r' and subPlotNr == 0 :
                 dim=np.shape(self.img)
-                self.ax.set_xlim(-0.5,dim[1]-0.5)
-                self.ax.set_ylim(-0.5,dim[0]-0.5)
+                range=np.max([dim[0],dim[1]])
+                self.ax.set_xlim(dim[1]/2.-range/2.,dim[1]/2.+range/2.)
+                self.ax.set_ylim(dim[0]/2.-range/2.,dim[0]/2.+range/2.)
+                #self.ax.set_xlim(-0.5,dim[1]-0.5)
+                #self.ax.set_ylim(-0.5,dim[0]-0.5)
                 plt.draw()
 
             elif event.key == 'r' and subPlotNr == 1 :
@@ -176,6 +180,7 @@ class TV:
                 # button press in image window to zoom/pan
                 xlim = self.ax.get_xlim()
                 ylim = self.ax.get_ylim()
+                print xlim,ylim
                 if event.button == 1 :
                     # zoom in
                     xrange = ( xlim[1]-xlim[0] )/ 2.
@@ -190,8 +195,10 @@ class TV:
                     yrange = ylim[1]-ylim[0]
                 #if xrange < yrange and xrange < 512 : xrange = 512
                 #if yrange < xrange and yrange < 512 : yrange = 512
-                self.ax.set_xlim(event.xdata-xrange/2.,event.xdata+xrange/2.)
-                self.ax.set_ylim(event.ydata-yrange/2.,event.ydata+yrange/2.)
+                print xrange,yrange
+                range=max([xrange,yrange])
+                self.ax.set_xlim(event.xdata-range/2.,event.xdata+range/2.)
+                self.ax.set_ylim(event.ydata-range/2.,event.ydata+range/2.)
                 plt.draw()
             elif subPlotNr == 1 :
                 # flag button press in colorbar
@@ -231,11 +238,11 @@ class TV:
         """
         Get the nr of the subplot that has been clicked
         
-        Arguments:
-        event -- an event
+        Args::
+          event -- an event
         
         Returns:
-        A number or None if no subplot has been clicked
+          A number or None if no subplot has been clicked
         """
     
         i = 0
@@ -265,9 +272,9 @@ class TV:
         """
         main display routine: displays image with optional scaling
 
-        Arguments:
-           img: a numpy array OR a fits HDU
-           min=, max= : option scaling arguments
+        Args:
+          img: a numpy array OR a fits HDU
+          min=, max= : option scaling arguments
         """
 
         # load data array depending on input type
@@ -317,8 +324,11 @@ class TV:
  
         # display image and new colorbar 
         dim=np.shape(self.img)
-        self.ax.set_xlim(-0.5,dim[1]-0.5)
-        self.ax.set_ylim(-0.5,dim[0]-0.5)
+        range=np.max([dim[0],dim[1]])
+        self.ax.set_xlim(dim[1]/2.-range/2.,dim[1]/2.+range/2.)
+        self.ax.set_ylim(dim[0]/2.-range/2.,dim[0]/2.+range/2.)
+        #self.ax.set_xlim(-0.5,dim[1]-0.5)
+        #self.ax.set_ylim(-0.5,dim[0]-0.5)
         self.aximage = self.ax.imshow(data,vmin=min,vmax=max,cmap=self.cmap,interpolation='nearest')
         old=self.axlist.pop(current)
         # if we had a previous image, reload the data with a single value
@@ -336,6 +346,7 @@ class TV:
         self.cblist.pop(current)
         self.cblist.insert(current,self.cb)
 
+        print 'drawing...'
         plt.draw()
         # instead of redraw color, could replace data, but not if sizes change?
         # img.set_data()
@@ -348,9 +359,9 @@ class TV:
         displays a patch (box by default) on an image
 
         Args:
-           x,y : center position of patch
-           size : (optional) patch size
-           color : (optional) patch color
+          x,y : center position of patch
+          size : (optional) patch size
+          color : (optional) patch color
         """
         plt.figure(self.fig.number)
         if size == None : size = 3
@@ -371,10 +382,10 @@ class TV:
         blocking input waits for key press in display and returns key and 
         data pixel location of keypress
         Args:
-              none
+          none
 
-        Return:
-              key pressed, x data position, y data position
+        Returns:
+          key pressed, x data position, y data position
         """
         self.startBlock()
         return self.event.key, self.event.xdata, self.event.ydata
