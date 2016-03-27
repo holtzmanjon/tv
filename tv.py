@@ -29,9 +29,12 @@ class TV:
         tv.canvas.set_window_title('Image display window')
         tv.set_facecolor('darkred')
         #ax = plt.axes()
-        ax = tv.add_subplot(111)
+        #ax = tv.add_subplot(111)
+        rect = 0., 0.05, 1., 0.95
+        ax = tv.add_axes(rect)
         self.ax = ax
         ax.axis('off')
+        self.axis = False
 
         # set up initial img and header lists
         self.current = -1
@@ -50,7 +53,9 @@ class TV:
         # set up colorbar
         self.cb = None
         self.cblist = [None, None, None, None]
-        tv.subplots_adjust(left=-0.15,right=1.15,bottom=-0.10,top=1.00)
+        rect = 0.00, 0.03, 1., 0.06
+        self.cb_ax = tv.add_axes(rect)
+        #tv.subplots_adjust(left=-0.15,right=1.15,bottom=-0.10,top=1.00)
         self.bottom = 0.
         self.top = 1.
 
@@ -127,10 +132,9 @@ class TV:
                         self.axlist[i].set_visible(False)
                 self.aximage=self.axlist[self.current]
                 self.cb=self.cblist[self.current]
-                #self.aximage = self.ax.imshow(self.img,
-                #  vmin=self.scale[0],vmax=self.scale[1],cmap=self.cmap,interpolation='none')
                 #self.cb.ax.clear()
-                #self.cb = self.ax.get_figure().colorbar(self.aximage,cax=self.cb.ax,orientation='horizontal')
+                #self.cb = self.fig.colorbar(self.aximage,cax=self.cb.ax,orientation='horizontal')
+                #self.cb = self.ax.get_figure().colorbar(self.aximage,cax=self.cb_ax,orientation='horizontal')
                 #cm=cmap.remap(self.cmap,self.bottom,self.top)
                 #self.aximage.set_cmap(cm)
                 plt.draw()
@@ -172,6 +176,32 @@ class TV:
                 xs,ys = scale()
                 x,y = autopy.mouse.get_pos()
                 autopy.mouse.move(x,int(y+ys))
+
+            elif event.key == 'a' and subPlotNr == 0 :
+                if self.axis :
+                    rect = 0., 0.05, 1., 0.95
+                    self.ax.axis('off')
+                else :
+                    rect = 0.05, 0.15, 0.95, 0.85
+                    self.ax.axis('on')
+                self.ax.set_position(rect)
+                self.axis = not self.axis
+                plt.draw()
+
+            elif event.key == 'h' or event.key == '?' :
+                print 'Asynchronous commands: '
+                print 'Image window: '
+                print '  mouse:'
+                print '    left mouse  : zoom in, centered on cursoe'
+                print '    center mouse: zoom out, centered on cursoe'
+                print '    right mouse : pan, center to cursor'
+                print '  keys:'
+                print '    r           : redraw at default zoom'
+                print '    +/=         : toggle to next image in stack'
+                print '    -           : toggle to previous image in stack'
+                print '    arrow keys  : move single image pixels'
+                print '    a           : toggle axes on/off'
+                print '    h/?         : print this help'
 
             if self.blocking == 1 : self.stopBlock()
 
@@ -338,7 +368,8 @@ class TV:
         if old is not None : old.set_data(z)
         self.axlist.insert(current,self.aximage)
         if self.cb is None :
-            self.cb = self.fig.colorbar(self.aximage,orientation='horizontal',shrink=0.7,pad=0)
+            #self.cb = self.fig.colorbar(self.aximage,orientation='horizontal',shrink=0.7,pad=0)
+            self.cb = self.fig.colorbar(self.aximage,cax=self.cb_ax,orientation='horizontal')
             #plt.subplots_adjust(left=-0.15,right=1.15,bottom=-0.10,top=1.00)
         else :
             self.cb.ax.clear()
@@ -379,8 +410,9 @@ class TV:
 
     def tvmark(self) :
         """
-        blocking input waits for key press in display and returns key and 
-        data pixel location of keypress
+        Blocking input: waits for key press in display and returns key 
+        that was pressed and data pixel location of the keypress
+
         Args:
           none
 
@@ -390,3 +422,9 @@ class TV:
         self.startBlock()
         return self.event.key, self.event.xdata, self.event.ydata
 
+    def fill(self) :
+        y,x=np.mgrid[0:100,0:100]
+        self.tv(x)
+        self.tv(y)
+        self.tv(x+y)
+        self.tv(x-y)
