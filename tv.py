@@ -210,7 +210,6 @@ class TV:
                 # button press in image window to zoom/pan
                 xlim = self.ax.get_xlim()
                 ylim = self.ax.get_ylim()
-                print xlim,ylim
                 if event.button == 1 :
                     # zoom in
                     xrange = ( xlim[1]-xlim[0] )/ 2.
@@ -223,9 +222,6 @@ class TV:
                     # pan
                     xrange = xlim[1]-xlim[0]
                     yrange = ylim[1]-ylim[0]
-                #if xrange < yrange and xrange < 512 : xrange = 512
-                #if yrange < xrange and yrange < 512 : yrange = 512
-                print xrange,yrange
                 range=max([xrange,yrange])
                 self.ax.set_xlim(event.xdata-range/2.,event.xdata+range/2.)
                 self.ax.set_ylim(event.ydata-range/2.,event.ydata+range/2.)
