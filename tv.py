@@ -373,7 +373,6 @@ class TV:
         self.cblist.pop(current)
         self.cblist.insert(current,self.cb)
 
-        print 'drawing...'
         plt.draw()
         # instead of redraw color, could replace data, but not if sizes change?
         # img.set_data()
